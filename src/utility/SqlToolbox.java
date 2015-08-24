@@ -38,7 +38,8 @@ public class SqlToolbox {
 			for(int columnCounter = 1; columnCounter < numberOfColumns+1; columnCounter++) {
 				columnName = resultSetMetaData.getColumnName(columnCounter).toLowerCase();
 				columnIndeces.put(columnName, columnCounter);
-			}	
+			}
+			resultSet.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -80,7 +81,8 @@ public class SqlToolbox {
 				preparedStatementStringBuffer.append("?, ");
 			}
 			preparedStatementStringBuffer.append("?)");
-			
+			statement.close();
+			resultSet.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
