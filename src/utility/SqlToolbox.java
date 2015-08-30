@@ -103,7 +103,7 @@ public class SqlToolbox {
 				ps.setString(psIndex, value);
 			} else {
 				System.out.println(column+" not found in MySQL table: "+table+"!");
-				System.exit(1);
+				throw new Exception();
 			}
 		}
 		ps.executeUpdate();
