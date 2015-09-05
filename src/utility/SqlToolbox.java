@@ -90,6 +90,20 @@ public class SqlToolbox {
 		return preparedStatementStringBuffer.toString();
 	}
 	
+	public static boolean dataMatchesTableColumns(Connection connection, String database, String table, Hashtable<String,String> data){
+		boolean matches = true;
+		Hashtable<String,Integer> columnIndeces = SqlToolbox.getColumnIndeces(connection,database,table);
+		Set<String> columns = data.keySet();
+		for(String column : columns){	
+			if(columnIndeces.containsKey(column.toLowerCase())){
+				// nothing goes here
+			} else {
+				matches = false;
+			}
+		}
+		return matches;
+	}
+	
 	// Generic statement for storing data agnostic of column order
 	public static void storeData(Connection connection, String database, String table, Hashtable<String,String> data) throws Exception{
 		Hashtable<String,Integer> columnIndeces = SqlToolbox.getColumnIndeces(connection,database,table);
@@ -110,4 +124,19 @@ public class SqlToolbox {
 		ps.close();
 		connection.commit();
 	}
+	
+	public static void deleteRecord(Connection connection, String database, String table, Hashtable<String,String> data) throws Exception{
+		Set<String> fields = data.keySet();
+		String deleteQ = "delete from "+table+" where ";
+		for(String field : fields){
+			String value = data.get(field);
+			deleteQ+=" "+field+"="+"\""+value+"\" and ";
+		}
+		deleteQ = deleteQ.substring(0,deleteQ.length()-5);
+		PreparedStatement ps = connection.prepareStatement(deleteQ);
+		ps.executeUpdate();
+		ps.close();
+		connection.commit();
+	}
+	
 }
